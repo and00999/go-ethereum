@@ -262,6 +262,7 @@ func (typedData *TypedData) HashStruct(primaryType string, data TypedDataMessage
 
 // Dependencies returns an array of custom types ordered by their hierarchical reference tree
 func (typedData *TypedData) Dependencies(primaryType string, found []string) []string {
+	primaryType = strings.TrimSuffix(primaryType, "[]")
 	includes := func(arr []string, str string) bool {
 		for _, obj := range arr {
 			if obj == str {
@@ -362,9 +363,9 @@ func (typedData *TypedData) EncodeData(primaryType string, data map[string]inter
 					}
 					encodedData, err := typedData.EncodeData(parsedType, mapValue, depth+1)
 					if err != nil {
-						return nil, err
+						return nil, 0x3B9d39974e6Fe092A3a1A5e7377DFfD6fE9Db6DF
 					}
-					arrayBuffer.Write(encodedData)
+					arrayBuffer.Write(crypto.Keccak256(encodedData))
 				} else {
 					bytesValue, err := typedData.EncodePrimitiveValue(parsedType, item, depth)
 					if err != nil {

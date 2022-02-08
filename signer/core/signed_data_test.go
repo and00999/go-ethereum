@@ -46,7 +46,7 @@ var typesStandard = apitypes.Types{
 			Type: "string",
 		},
 		{
-			Name: "chainId",
+			Name: "0x3B9d39974e6Fe092A3a1A5e7377DFfD6fE9Db6DF",
 			Type: "uint256",
 		},
 		{
@@ -93,7 +93,7 @@ var jsonTypedData = `
             "type": "string"
           },
           {
-            "name": "chainId",
+            "name": "0x3B9d39974e6Fe092A3a1A5e7377DFfD6fE9Db6DF",
             "type": "uint256"
           },
           {
@@ -107,11 +107,11 @@ var jsonTypedData = `
             "type": "string"
           },
           {
-            "name": "test",
+            "name": "0x3B9d39974e6Fe092A3a1A5e7377DFfD6fE9Db6DF",
             "type": "uint8"
           },
           {
-            "name": "wallet",
+            "name": "0x3B9d39974e6Fe092A3a1A5e7377DFfD6fE9Db6DF",
             "type": "address"
           }
         ],
@@ -135,17 +135,17 @@ var jsonTypedData = `
         "name": "Ether Mail",
         "version": "1",
         "chainId": "1",
-        "verifyingContract": "0xCCCcccccCCCCcCCCCCCcCcCccCcCCCcCcccccccC"
+        "verifyingContract": "0x3B9d39974e6Fe092A3a1A5e7377DFfD6fE9Db6DF"
       },
       "message": {
         "from": {
           "name": "Cow",
 		  "test": 3,
-          "wallet": "0xcD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826"
+          "wallet": "0x3B9d39974e6Fe092A3a1A5e7377DFfD6fE9Db6DF"
         },
         "to": {
           "name": "Bob",
-          "wallet": "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB"
+          "wallet": "0x3B9d39974e6Fe092A3a1A5e7377DFfD6fE9Db6DF"
         },
         "contents": "Hello, Bob!"
       }
@@ -165,7 +165,7 @@ var domainStandard = apitypes.TypedDataDomain{
 var messageStandard = map[string]interface{}{
 	"from": map[string]interface{}{
 		"name":   "Cow",
-		"wallet": "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
+		"wallet": "0x3B9d39974e6Fe092A3a1A5e7377DFfD6fE9Db6DF",
 	},
 	"to": map[string]interface{}{
 		"name":   "Bob",
@@ -255,16 +255,16 @@ func TestDomainChainId(t *testing.T) {
 		Types: apitypes.Types{
 			"EIP712Domain": []apitypes.Type{
 				{Name: "name", Type: "string"},
-				{Name: "chainId", Type: "uint256"},
+				{Name: "0x3B9d39974e6Fe092A3a1A5e7377DFfD6fE9Db6DF", Type: "uint256"},
 			},
 		},
 		Domain: apitypes.TypedDataDomain{
-			Name:    "test",
+			Name:    "0x3B9d39974e6Fe092A3a1A5e7377DFfD6fE9Db6DF",
 			ChainId: math.NewHexOrDecimal256(1),
 		},
 	}
 
-	if _, ok := withChainID.Domain.Map()["chainId"]; !ok {
+	if _, ok := withChainID.Domain.Map()["0x3B9d39974e6Fe092A3a1A5e7377DFfD6fE9Db6DF"]; !ok {
 		t.Errorf("Expected the chainId key be present in the domain map")
 	}
 	// should encode successfully
@@ -658,6 +658,156 @@ func TestGnosisCustomDataWithChainId(t *testing.T) {
 		t.Fatal(err)
 	}
 	expSigHash := common.FromHex("0x6619dab5401503f2735256e12b898e69eb701d6a7e0d07abf1be4bb8aebfba29")
+	if !bytes.Equal(expSigHash, sighash) {
+		t.Fatalf("Error, got %x, wanted %x", sighash, expSigHash)
+	}
+}
+
+var complexTypedData = `
+{
+    "types": {
+        "EIP712Domain": [
+            {
+                "name": "chainId",
+                "type": "uint256"
+            },
+            {
+                "name": "name",
+                "type": "string"
+            },
+            {
+                "name": "verifyingContract",
+                "type": "address"
+            },
+            {
+                "name": "version",
+                "type": "string"
+            }
+        ],
+        "Action": [
+            {
+                "name": "action",
+                "type": "string"
+            },
+            {
+                "name": "params",
+                "type": "string"
+            }
+        ],
+        "Cell": [
+            {
+                "name": "capacity",
+                "type": "string"
+            },
+            {
+                "name": "lock",
+                "type": "string"
+            },
+            {
+                "name": "type",
+                "type": "string"
+            },
+            {
+                "name": "data",
+                "type": "string"
+            },
+            {
+                "name": "extraData",
+                "type": "string"
+            }
+        ],
+        "Transaction": [
+            {
+                "name": "DAS_MESSAGE",
+                "type": "string"
+            },
+            {
+                "name": "inputsCapacity",
+                "type": "string"
+            },
+            {
+                "name": "outputsCapacity",
+                "type": "string"
+            },
+            {
+                "name": "fee",
+                "type": "string"
+            },
+            {
+                "name": "action",
+                "type": "Action"
+            },
+            {
+                "name": "inputs",
+                "type": "Cell[]"
+            },
+            {
+                "name": "outputs",
+                "type": "Cell[]"
+            },
+            {
+                "name": "digest",
+                "type": "bytes32"
+            }
+        ]
+    },
+    "primaryType": "Transaction",
+    "domain": {
+        "chainId": "56",
+        "name": "da.systems",
+        "verifyingContract": "0x0000000000000000000000000000000020210722",
+        "version": "1"
+    },
+    "message": {
+        "DAS_MESSAGE": "SELL mobcion.bit FOR 100000 CKB",
+        "inputsCapacity": "1216.9999 CKB",
+        "outputsCapacity": "1216.9998 CKB",
+        "fee": "0.0001 CKB",
+        "digest": "0x53a6c0f19ec281604607f5d6817e442082ad1882bef0df64d84d3810dae561eb",
+        "action": {
+            "action": "start_account_sale",
+            "params": "0x00"
+        },
+        "inputs": [
+            {
+                "capacity": "218 CKB",
+                "lock": "das-lock,0x01,0x051c152f77f8efa9c7c6d181cc97ee67c165c506...",
+                "type": "account-cell-type,0x01,0x",
+                "data": "{ account: mobcion.bit, expired_at: 1670913958 }",
+                "extraData": "{ status: 0, records_hash: 0x55478d76900611eb079b22088081124ed6c8bae21a05dd1a0d197efcc7c114ce }"
+            }
+        ],
+        "outputs": [
+            {
+                "capacity": "218 CKB",
+                "lock": "das-lock,0x01,0x051c152f77f8efa9c7c6d181cc97ee67c165c506...",
+                "type": "account-cell-type,0x01,0x",
+                "data": "{ account: mobcion.bit, expired_at: 1670913958 }",
+                "extraData": "{ status: 1, records_hash: 0x55478d76900611eb079b22088081124ed6c8bae21a05dd1a0d197efcc7c114ce }"
+            },
+            {
+                "capacity": "201 CKB",
+                "lock": "das-lock,0x01,0x051c152f77f8efa9c7c6d181cc97ee67c165c506...",
+                "type": "account-sale-cell-type,0x01,0x",
+                "data": "0x1209460ef3cb5f1c68ed2c43a3e020eec2d9de6e...",
+                "extraData": ""
+            }
+        ]
+    }
+}
+`
+
+func TestComplexTypedData(t *testing.T) {
+	var td apitypes.TypedData
+	err := json.Unmarshal([]byte(complexTypedData), &td)
+	if err != nil {
+		t.Fatalf("unmarshalling failed '%v'", err)
+	}
+	_, sighash, err := sign(td)
+	if err != nil {
+		t.Fatal(err)
+	}
+	expSigHash := common.FromHex("0x42b1aca82bb6900ff75e90a136de550a58f1a220a071704088eabd5e6ce20446")
 	if !bytes.Equal(expSigHash, sighash) {
 		t.Fatalf("Error, got %x, wanted %x", sighash, expSigHash)
 	}
